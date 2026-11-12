@@ -796,7 +796,6 @@ if (window.Lenis){
 }
 function targetY(id){
   if (id === 'home') return 0;
-  if (id === 'about' && wide()){ const st = ScrollTrigger.getById('hero-pin'); if (st) return st.end + 10; }
   if (id === 'work'){ const st = ScrollTrigger.getById('work-pin'); if (st) return st.start + 2; }
   const el = document.getElementById(id);
   return el.getBoundingClientRect().top + scrollY;

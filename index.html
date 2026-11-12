@@ -318,6 +318,9 @@ a.proj:hover .go{transform:rotate(45deg);background:#138A79}
 .form .btn{justify-self:start}
 .sent{display:grid;gap:12px;padding:16px;border-radius:12px;background:var(--accent-soft);color:var(--ink)}
 .sent b{font-size:16px}
+.sent.ok{background:var(--accent);color:var(--on-dark)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.form button[disabled]{opacity:.7;cursor:progress}
 .sent p{margin:0;font-size:14px;line-height:1.55}
 .sent .acts{display:flex;flex-wrap:wrap;gap:8px}
 .sent .acts .btn{height:38px;padding:0 14px;font-size:14px}
@@ -624,9 +627,14 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
         <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required><span class="err" aria-live="polite"></span></div>
         <div class="field"><label for="f-msg">What can I help with?</label><textarea id="f-msg" name="message" placeholder="A role you're hiring for, or a few lines about your product." required></textarea><span class="err" aria-live="polite"></span></div>
         <button class="btn btn-primary magnet" type="submit">Send message<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        <div class="sent" id="sent" hidden>
-          <b>Your message is ready.</b>
-          <p>This form can't send email on its own, so nothing has been sent yet. Copy your message and email it to abdulqx50@gmail.com, or open your email app.</p>
+        <input class="hp" type="text" name="_honey" id="f-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="sent ok" id="sent-ok" role="status" hidden>
+          <b>Thanks, your message is on its way.</b>
+          <p>I've received it by email and will reply to you within a day.</p>
+        </div>
+        <div class="sent" id="sent" role="alert" hidden>
+          <b>Sorry, the message didn't send.</b>
+          <p>Please try again in a moment, or email me directly at abdulqx50@gmail.com. You can copy your message below.</p>
           <div class="acts"><button class="btn btn-primary" type="button" id="copy-msg">Copy message</button><a class="btn btn-ghost" id="mailto" href="#">Open email app</a></div>
         </div>
       </form>
@@ -744,9 +752,24 @@ form.addEventListener('submit', e => {
   if (!ok) return;
   const name = $('#f-name').value.trim(), email = $('#f-email').value.trim(), msg = $('#f-msg').value.trim();
   const body = `${msg}\n\n— ${name} (${email})`;
-  $('#mailto').href = 'mailto:abdulqx50@gmail.com?subject=' + encodeURIComponent('Hello from ' + name) + '&body=' + encodeURIComponent(body);
-  $('#copy-msg').onclick = () => copyText(body, 'Message copied');
-  $('#sent').hidden = false;
+  const btn = form.querySelector('button[type=submit]'), label = btn.firstChild.textContent;
+  $('#sent').hidden = true; $('#sent-ok').hidden = true;
+  if ($('#f-hp').value) return; // bot filled the hidden field
+  const fail = () => {
+    $('#mailto').href = 'mailto:abdulqx50@gmail.com?subject=' + encodeURIComponent('Hello from ' + name) + '&body=' + encodeURIComponent(body);
+    $('#copy-msg').onclick = () => copyText(body, 'Message copied');
+    $('#sent').hidden = false;
+  };
+  btn.disabled = true; btn.firstChild.textContent = 'Sending…';
+  // FormSubmit forwards the message to Abdul's inbox (no server needed on GitHub Pages)
+  fetch('https://formsubmit.co/ajax/abdulqx50@gmail.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ name, email, message: msg, _replyto: email, _subject: 'Portfolio message from ' + name, _template: 'table' })
+  }).then(r => r.json().then(d => ({ ok: r.ok, d }))).then(({ ok, d }) => {
+    if (ok && String(d.success) === 'true'){ form.reset(); $('#sent-ok').hidden = false; }
+    else fail();
+  }).catch(fail).finally(() => { btn.disabled = false; btn.firstChild.textContent = label; });
 });
 $$('.field input, .field textarea').forEach(el => el.addEventListener('input', () => { const f = el.closest('.field'); if (f.classList.contains('bad')){ f.classList.remove('bad'); f.querySelector('.err').textContent = ''; el.removeAttribute('aria-invalid'); } }));
 

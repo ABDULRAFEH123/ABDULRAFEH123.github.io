@@ -102,7 +102,7 @@ html.js .loader{display:flex;position:fixed;inset:0;z-index:200;background:var(-
 .f-role .mark{width:42px;height:42px;border-radius:9px;background:var(--accent);color:var(--on-dark);display:grid;place-items:center;font-weight:800;font-size:15px;letter-spacing:-.02em;font-family:var(--f-mono)}
 .f-role b{display:block;font-size:15px;line-height:1.15;white-space:nowrap}
 .f-role small{display:block;color:var(--slate);font-size:13px}
-.f-city{left:80vw;top:calc(var(--rowY) + 70px);padding:14px 18px;text-align:center}
+.f-city{left:80vw;top:var(--cityY,calc(var(--rowY) + 70px));padding:14px 18px;text-align:center}
 .f-city b{display:block;font-size:clamp(26px,2.6vw,40px);line-height:1;color:var(--accent);letter-spacing:-.04em;font-weight:800}
 .f-city small{display:block;color:var(--ink);font-size:13px;font-weight:600;margin-top:6px;line-height:1.25}
 .f-focus{left:var(--focusX,70vw);top:var(--focusY,calc(var(--rowY) - 110px));padding:12px 18px 12px 14px;list-style:none;margin:0;display:grid;gap:6px}
@@ -120,9 +120,9 @@ html.js .loader{display:flex;position:fixed;inset:0;z-index:200;background:var(-
 .btn-primary:hover{background:var(--accent-ink)}
 .btn-ghost{background:var(--glass);border-color:var(--glass-line);color:var(--ink);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .btn-ghost:hover{border-color:var(--ink)}
-.h-intro{position:absolute;right:2.8vw;bottom:5vh;width:min(25vw,360px);margin:0}
+.h-intro{position:absolute;right:2.8vw;bottom:5vh;width:min(26vw,370px);margin:0;padding:18px 20px;border-radius:14px;background:var(--glass);border:1px solid var(--glass-line);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 18px 40px -24px rgba(20,26,26,.35)}
 .h-intro .eyebrow{margin-bottom:12px}
-.h-intro p{margin:0;font-size:15px;line-height:1.6}
+.h-intro p{margin:0;font-size:14.5px;line-height:1.6;color:var(--ink-2,#3a3f45)}
 .h-scroll{position:absolute;right:2.8vw;bottom:calc(5vh + 150px);display:none!important;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--slate)}
 .h-scroll .drip{width:1px;height:46px;background:var(--line);position:relative;overflow:hidden}
 .h-scroll .drip::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:var(--ink);animation:drip 1.8s var(--ease) infinite}
@@ -645,6 +645,14 @@ function fitGiant(){
     hero.style.setProperty('--focusX', Math.round(Math.min(pl + pw * .76, innerWidth - 220)) + 'px');
     hero.style.setProperty('--focusY', Math.round(ptop + ph * .36) + 'px');
   }
+  const city = document.querySelector('.f-city'), intro = document.querySelector('.h-intro');
+  if (city && intro && wide()){
+    const rowY = bottom + innerHeight * 0.02;
+    const introTop = innerHeight - innerHeight * .05 - intro.offsetHeight;
+    let top = Math.min(rowY + 70, introTop - city.offsetHeight - 16);
+    if (top < rowY + 44) top = Math.max(12, rowY - city.offsetHeight - 14); // short screens: lift it above the nav row
+    hero.style.setProperty('--cityY', Math.round(top) + 'px');
+  }
   if (!wide()){
     const pTop = Math.round(bottom - 6), pH = Math.round(Math.min(innerHeight * .52, innerWidth * 1.1));
     root.style.setProperty('--pTop', pTop + 'px'); root.style.setProperty('--pH', pH + 'px');
@@ -761,7 +769,7 @@ gsap.to('.meter i', { scaleY: 1, ease: 'none', scrollTrigger: { start: 0, end: '
 /* ---------- Loader + intro ---------- */
 const loader = $('.loader');
 const intro = gsap.timeline({ paused: true });
-gsap.set('.portrait', { yPercent: 14, opacity: 0 });
+gsap.set('.portrait', { x: 0, xPercent: wide() ? -47 : -50, yPercent: 14, opacity: 0 });
 gsap.set('.giant .ch', { yPercent: 115 });
 gsap.set(giant, { clipPath: 'inset(-2% -2% -4% -2%)' });
 gsap.set('.h-title .ln>span', { yPercent: 110 });
@@ -937,6 +945,7 @@ mm.add(`(min-width: ${BIG}px)`, () => {
 
 /* ================= Phone ================= */
 mm.add(`(max-width: ${BIG - 1}px)`, () => {
+  gsap.set('.portrait', { x: 0, xPercent: -50 });
   const logo = $('.m-logo');
   gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom 30%', scrub: .7, invalidateOnRefresh: true } })
     .to('.portrait .sharp', { opacity: 0, filter: 'blur(12px)', duration: .5 }, 0)

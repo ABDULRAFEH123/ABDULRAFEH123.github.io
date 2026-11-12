@@ -186,7 +186,7 @@ main{position:relative;z-index:2}
 .lede{font-size:clamp(16px,1.25vw,19px);line-height:1.6;max-width:56ch}
 
 /* About / journey */
-.about{padding-block:clamp(90px,16vh,170px) 40px}
+.about{padding-block:clamp(40px,7vh,80px) 40px}
 .about .display{max-width:15ch}
 .about .lede{margin-top:28px}
 .journey{position:relative;margin-top:clamp(40px,8vh,90px);padding-bottom:40px}
@@ -194,7 +194,14 @@ main{position:relative;z-index:2}
 .journey .p-line{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round}
 .journey .p-tail{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:6 9;opacity:.6}
 .journey .p-dot{fill:var(--accent-soft);stroke:var(--ink);stroke-width:1.6}
-.stop{position:relative;z-index:1;width:min(430px,44%);margin-left:var(--x);margin-top:var(--mt,56px)}
+.cols{display:grid;grid-template-columns:1fr 1fr;column-gap:7%;padding-inline:1% 3%}
+.col{display:flex;flex-direction:column;gap:clamp(44px,8vh,90px)}
+.col.l{padding-top:clamp(150px,24vh,250px)}
+.col.r{padding-top:10px}
+.stop{position:relative;z-index:1;width:min(480px,100%)}
+.col.l .stop:nth-child(even){margin-left:9%}
+.col.r .stop{align-self:flex-end}
+.col.r .stop:nth-child(even){margin-right:9%}
 .stop::before{content:"";position:absolute;top:10%;bottom:10%;width:1px;background:rgba(25,27,31,.25);left:-26px}
 .stop.flip::before{left:auto;right:-26px}
 .card{position:relative;background:var(--glass);border:1px solid var(--glass-line);border-radius:14px;padding:28px 30px 24px;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 26px 60px -36px rgba(25,27,31,.55);will-change:transform}
@@ -207,7 +214,18 @@ main{position:relative;z-index:2}
 .card .link{display:inline-flex;align-items:center;gap:6px;font-weight:650;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:7px 12px;transition:border-color .25s}
 .card .link:hover{border-color:var(--ink)}
 .card .link svg{width:13px;height:13px}
+.stop.narrow{width:min(340px,72%)}
 .photo{padding:10px 10px 0}
+.photo .frame.me{aspect-ratio:4/5;background:radial-gradient(120% 80% at 50% 100%,#15897A 0%,var(--accent) 45%,#08403A 100%)}
+.photo .frame.me img{object-fit:contain;object-position:bottom;transform:none}
+.fan{position:relative;height:clamp(150px,13vw,200px);margin:-4px 0 24px}
+.fan img{position:absolute;width:74%;aspect-ratio:16/9;object-fit:cover;object-position:left top;border-radius:9px;border:1px solid var(--line);box-shadow:0 18px 34px -20px rgba(20,26,26,.5);transition:transform .6s var(--ease)}
+.fan img:nth-child(1){left:0;top:12%;transform:rotate(-6deg)}
+.fan img:nth-child(2){left:13%;top:4%;transform:rotate(1deg)}
+.fan img:nth-child(3){right:0;top:16%;transform:rotate(6deg)}
+.card:hover .fan img:nth-child(1){transform:rotate(-9deg) translateX(-8px)}
+.card:hover .fan img:nth-child(3){transform:rotate(9deg) translateX(8px)}
+.amb{position:absolute;inset:0;opacity:0;pointer-events:none;background:radial-gradient(42% 38% at 78% 22%,rgba(14,107,94,.13),transparent 70%),radial-gradient(38% 42% at 22% 82%,rgba(14,107,94,.09),transparent 70%),radial-gradient(rgba(25,27,31,.07) 1px,transparent 1.2px) 0 0/26px 26px;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent)}
 .photo figure{margin:0}
 .photo .frame{border-radius:9px;overflow:hidden;background:var(--bg-2);position:relative}
 .photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.08)}
@@ -327,7 +345,8 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
   .f-role{left:4vw;top:calc(var(--rowY) + 52px);padding:10px 12px;gap:10px}
   .f-role .mark{width:34px;height:34px;font-size:12px}
   .f-focus{display:none}
-  .stop{width:min(400px,62%)}
+  .cols{column-gap:5%}
+  .stop.narrow{width:min(300px,80%)}
   .work-head{grid-template-columns:1fr;gap:16px}
   .work-head p{justify-self:start}
 }
@@ -351,7 +370,9 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
   .h-title{position:relative;left:auto;bottom:auto;max-width:none;font-size:clamp(34px,10.4vw,64px)}
   .h-cta{position:relative;left:auto;bottom:auto;margin-top:20px;flex-wrap:wrap}
   .h-intro{position:relative;right:auto;bottom:auto;width:auto;margin-top:32px;padding:18px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-line);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-  .stop{width:100%;margin-left:0}
+  .cols,.col{display:contents}
+  .journey{display:flex;flex-direction:column;gap:28px}
+  .stop,.stop.narrow{width:100%;margin:0!important;order:var(--o)}
   .stop::before{display:none}
   .journey svg.path{display:none}
   .work-head{grid-template-columns:1fr;gap:18px}
@@ -387,6 +408,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
 
 <!-- Fixed stage -->
 <div class="stage" aria-hidden="true">
+  <div class="amb"></div>
   <div class="glow"></div>
   <p class="giant"><span class="ch">A</span><span class="ch">B</span><span class="ch">D</span><span class="ch">U</span><span class="ch">L</span></p>
   <div class="portrait">
@@ -467,59 +489,82 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);background:v
     <div class="journey">
       <svg class="path" aria-hidden="true"><path class="p-line"/><path class="p-tail"/><g class="dots"></g></svg>
 
-      <div class="stop flip" style="--x:54%;--mt:20px" data-side="r">
-        <article class="card tilt">
-          <span class="big">3+</span>
-          <h3>Years shipping production frontends</h3>
-          <p>React and Next.js apps that businesses use every day, built with TypeScript, tested, and deployed through CI/CD.</p>
-          <div class="foot"><span><b>Frontend Developer</b></span><span>Rawalpindi</span></div>
-        </article>
-      </div>
+      <div class="cols">
+        <div class="col l">
+        <div class="stop narrow" style="--o:2" data-side="l">
+          <article class="card photo tilt">
+            <figure>
+              <div class="frame me"><img src="img/abdul.webp" alt="Abdul Rafeh" loading="lazy"></div>
+              <figcaption>Abdul Rafeh<small>Rawalpindi, PK</small></figcaption>
+            </figure>
+          </article>
+        </div>
 
-      <div class="stop" style="--x:22%" data-side="l">
-        <article class="card tilt">
-          <span class="when">Jan 2026 – Nov 2026 · Remote</span>
-          <h3>Frontend Developer at Clentro</h3>
-          <p>Built multi-tenant SaaS modules for scheduling, members and billing with subscriptions and invoices. Added English/Arabic with full RTL, role-based access and white-label branding.</p>
-          <div class="foot"><span><b>280+</b> commits</span><span>Next.js · Redux Toolkit</span></div>
-        </article>
-      </div>
+        <div class="stop" style="--o:4" data-side="l">
+          <article class="card tilt">
+            <span class="when">Dec 2023 – Dec 2025 · On-site</span>
+            <h3>Frontend Developer at CorTechSols</h3>
+            <p>Delivered frontends for client products across AI, e-commerce and booking. Made pages about 30% faster with code-splitting, image optimisation and caching.</p>
+            <div class="foot"><span><b>React Query</b> · REST APIs</span><span>GitHub Actions · AWS</span></div>
+          </article>
+        </div>
 
-      <div class="stop" style="--x:4%" data-side="l">
-        <article class="card tilt">
-          <span class="when">Dec 2023 – Dec 2025 · On-site</span>
-          <h3>Frontend Developer at CorTechSols</h3>
-          <p>Delivered frontends for client products across AI, e-commerce and booking. Made pages about 30% faster with code-splitting, image optimisation and caching.</p>
-          <div class="foot"><span><b>React Query</b> · REST APIs</span><span>GitHub Actions · AWS</span></div>
-        </article>
-      </div>
+        <div class="stop" style="--o:6" data-side="l">
+          <article class="card tilt">
+            <span class="big">EN ⇄ AR</span>
+            <h3>Bilingual and right-to-left ready</h3>
+            <p>Interfaces that flip cleanly between English and Arabic, with layouts, icons and spacing that still feel natural in RTL.</p>
+          </article>
+        </div>
 
-      <div class="stop flip" style="--x:50%" data-side="r">
-        <article class="card tilt">
-          <span class="big">EN ⇄ AR</span>
-          <h3>Bilingual and right-to-left ready</h3>
-          <p>Interfaces that flip cleanly between English and Arabic, with layouts, icons and spacing that still feel natural in RTL.</p>
-        </article>
-      </div>
+        <div class="stop" style="--o:8" data-side="l">
+          <article class="card tilt">
+            <span class="big">Stack</span>
+            <h3>What I build with</h3>
+            <div class="stack"><span>React</span><span>Next.js</span><span>TypeScript</span><span>Tailwind CSS</span><span>Redux Toolkit</span><span>React Query</span><span>RxJS</span><span>NextAuth</span><span>Stripe</span><span>Vitest</span><span>Playwright</span><span>AWS Amplify</span><span>Vercel</span></div>
+          </article>
+        </div>
+        </div>
+        <div class="col r">
+        <div class="stop flip" style="--o:1" data-side="r">
+          <article class="card tilt">
+            <span class="big">3+</span>
+            <h3>Years shipping production frontends</h3>
+            <p>React and Next.js apps that businesses use every day, built with TypeScript, tested, and deployed through CI/CD.</p>
+            <div class="foot"><span><b>Frontend Developer</b></span><span>Rawalpindi</span></div>
+          </article>
+        </div>
 
-      <div class="stop" style="--x:14%" data-side="l">
-        <article class="card tilt">
-          <h3>What I bring</h3>
-          <ul class="wins">
-            <li><b>30%</b><span>Faster page loads</span><small>Code-splitting, image optimisation, caching</small></li>
-            <li><b>a11y</b><span>Accessible by default</span><small>Semantic markup, keyboard and screen-reader friendly</small></li>
-            <li><b>E2E</b><span>Tested before it ships</span><small>Vitest, React Testing Library, Playwright</small></li>
-          </ul>
-          <div class="foot"><span>Code</span><a class="link" href="https://github.com/ABDULRAFEH123" target="_blank" rel="noopener">GitHub<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
-        </article>
-      </div>
+        <div class="stop flip" style="--o:3" data-side="r">
+          <article class="card tilt">
+            <span class="when">Jan 2026 – Nov 2026 · Remote</span>
+            <h3>Frontend Developer at Clentro</h3>
+            <p>Built multi-tenant SaaS modules for scheduling, members and billing with subscriptions and invoices. Added English/Arabic with full RTL, role-based access and white-label branding.</p>
+            <div class="foot"><span><b>280+</b> commits</span><span>Next.js · Redux Toolkit</span></div>
+          </article>
+        </div>
 
-      <div class="stop flip" style="--x:56%" data-side="r">
-        <article class="card tilt">
-          <span class="big">Stack</span>
-          <h3>What I build with</h3>
-          <div class="stack"><span>React</span><span>Next.js</span><span>TypeScript</span><span>Tailwind CSS</span><span>Redux Toolkit</span><span>React Query</span><span>RxJS</span><span>NextAuth</span><span>Stripe</span><span>Vitest</span><span>Playwright</span><span>AWS Amplify</span><span>Vercel</span></div>
-        </article>
+        <div class="stop flip" style="--o:5" data-side="r">
+          <article class="card tilt">
+            <div class="fan" aria-hidden="true"><img src="img/motorcut.webp" alt="" loading="lazy"><img src="img/trackhero.webp" alt="" loading="lazy"><img src="img/dojowhiz.webp" alt="" loading="lazy"></div>
+            <h3>Three live products, used every day</h3>
+            <p>DojoWhiz, TrackHero and MotorCut: SaaS for academies, motorsport tracks and car dealerships.</p>
+            <div class="foot"><span>Selected work</span><a class="link" href="#work" data-go="work">See work<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+          </article>
+        </div>
+
+        <div class="stop flip" style="--o:7" data-side="r">
+          <article class="card tilt">
+            <h3>What I bring</h3>
+            <ul class="wins">
+              <li><b>30%</b><span>Faster page loads</span><small>Code-splitting, image optimisation, caching</small></li>
+              <li><b>a11y</b><span>Accessible by default</span><small>Semantic markup, keyboard and screen-reader friendly</small></li>
+              <li><b>E2E</b><span>Tested before it ships</span><small>Vitest, React Testing Library, Playwright</small></li>
+            </ul>
+            <div class="foot"><span>Code</span><a class="link" href="https://github.com/ABDULRAFEH123" target="_blank" rel="noopener">GitHub<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          </article>
+        </div>
+        </div>
       </div>
     </div>
   </section>
@@ -817,14 +862,14 @@ mm.add(`(min-width: ${BIG}px)`, () => {
 
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
-    scrollTrigger: { id: 'hero-pin', trigger: hero, start: 'top top', end: '+=210%', pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 }
+    scrollTrigger: { id: 'hero-pin', trigger: hero, start: 'top top', end: '+=150%', pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 }
   });
 
   // 1. portrait melts: sharp -> soft colour -> dark ambient silhouette
   tl.to('.portrait .sharp', { opacity: 0, filter: 'blur(16px)', duration: .42 }, 0)
     .to('.portrait .soft', { opacity: .55, duration: .3 }, .05)
-    .to('.portrait .shade', { opacity: .16, duration: .5 }, .2)
-    .to('.portrait .soft', { opacity: .2, duration: .4 }, .45)
+    .to('.portrait .shade', { opacity: .1, duration: .3 }, .2).to('.portrait .shade', { opacity: 0, duration: .25 }, .55).to('.amb', { opacity: 1, duration: .35 }, .4)
+    .to('.portrait .soft', { opacity: 0, duration: .3 }, .45)
     .to('.portrait', { scale: 1.16, yPercent: 5, duration: 1 }, 0);
 
   // 2. giant name: letters loosen, then the word collapses into the sidebar logo
@@ -950,7 +995,8 @@ mm.add(`(max-width: ${BIG - 1}px)`, () => {
   gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom 30%', scrub: .7, invalidateOnRefresh: true } })
     .to('.portrait .sharp', { opacity: 0, filter: 'blur(12px)', duration: .5 }, 0)
     .to('.portrait .soft', { opacity: .6, duration: .5 }, 0)
-    .to('.portrait .shade', { opacity: .25, duration: .5 }, .3)
+    .to('.portrait .shade', { opacity: .08, duration: .5 }, .3)
+    .to('.amb', { opacity: 1, duration: .5 }, .5)
     .to('.portrait', { scale: 1.12, duration: 1 }, 0)
     .to(giant, {
       x: () => rect(logo).left + 9 - natural(giant).left,
@@ -986,7 +1032,7 @@ function buildPath(){
     const r = s.getBoundingClientRect(), right = s.dataset.side === 'r';
     const ty = gsap.getProperty(s, 'y') || 0;
     return { x: (right ? r.right + 26 : r.left - 26) - jr.left, y: r.top - jr.top - ty + r.height * .62, side: right ? 1 : -1 };
-  });
+  }).sort((p, q) => p.y - q.y);
   const all = [{ x: jr.width - 8, y: -40, side: 1 }, ...pts];
   let d = `M${all[0].x},${all[0].y}`;
   for (let i = 1; i < all.length; i++){
